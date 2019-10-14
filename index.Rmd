@@ -1,14 +1,15 @@
 ---
 title: "Introduction to R for Biologists"
 author:  Alexia Cardona
+date: 5-6 November 2019
 toc: hide
 ---
 
 <br/>
-9-10 September 2019   
+   
 Bioinformatics Training Facility
 
-**Instructors:** Karsten Bach, Alexia Cardona, Hugo Tavares
+**Instructors:** Alexia Cardona, Celine Labouesse, Martin van Rongen
 
 <br/>
 
