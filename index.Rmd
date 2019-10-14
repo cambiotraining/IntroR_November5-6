@@ -1,0 +1,152 @@
+---
+title: "Introduction to R for Biologists"
+author:  Alexia Cardona
+toc: hide
+---
+
+<br/>
+9-10 September 2019   
+Bioinformatics Training Facility
+
+**Instructors:** Karsten Bach, Alexia Cardona, Hugo Tavares
+
+<br/>
+
+### Description
+
+**R** is one of the leading programming languages in **Data Science**. It is widely used to perform statistics, machine learning, visualisations and data analyses. It is an open source programming language so **all the software we will use in the course is free**. This course is an introduction to R **designed for participants with no programming experience**. We will start from scratch by introducing how to start programming in R and progress our way and learn how to read and write to files, manipulate data and visualise it by creating different plots - all the fundamental tasks you need to get you started analysing your data. We will be working in **RStudio** which is a software used to help you develop R code.  During the course we will be working with one of the most popular packages in R; **tidyverse**, the umbrella package for **dplyr** and **ggplot2** packages that will allow you to manipulate your data effectively and visualise it to a publication level standard.
+
+<br/>
+
+### Target Audience
+This course is designed for participants with no programming experience.
+
+<br/>
+
+### Sessions
+
+1. [Getting started](00-getting-started.html)
+2. [Introduction to R programming](01-intro-to-r.html)
+3. [Starting with data](02-starting-with-data.html)
+4. [Data manipulation and visualisation in tidyverse](03-tidyverse.html)
+
+<br/>
+
+### Data
+
+Data is from the paper [S. K. Morgan Ernest, Thomas J. Valone, and James H. Brown. 2009. Long-term monitoring and experimental manipulation of a Chihuahuan Desert ecosystem near Portal, Arizona, USA. Ecology 90:1708.](http://esapubs.org/archive/ecol/E090/118/)
+
+A simplified version of this data, suitable for teaching is available here which is the data we will be using in this course:
+<https://doi.org/10.6084/m9.figshare.1314459>
+
+However, we will download them directly from R during the lessons when we need them.
+
+<br/>
+
+### Setup instructions
+
+All the software required to run this course is installed on your machine, so you do need to do the following sections.  In case you are working on this on another machine please follow the instructions below:
+
+
+**R** and **RStudio** are separate downloads and installations. R is the
+underlying statistical computing environment, but using R alone is no
+fun. RStudio is a graphical integrated development environment (IDE) that makes
+using R much easier and more interactive. You need to install R before you
+install RStudio. After installing both programs, you will need to install the
+**`tidyverse`** package from within RStudio. Follow the instructions below for
+your operating system, and then follow the instructions to install the 
+**`tidyverse`** package.
+
+#### Windows
+
+##### If you already have R and RStudio installed
+
+* Open RStudio, and click on "Help" > "Check for updates". If a new version is
+	available, quit RStudio, and download the latest version for RStudio.
+* To check which version of R you are using, start RStudio and the first thing
+  that appears in the console indicates the version of R you are
+  running. Alternatively, you can type `sessionInfo()`, which will also display
+  which version of R you are running. Go on
+  the [CRAN website](https://cran.r-project.org/bin/windows/base/) and check
+  whether a more recent version is available. If so, please download and install
+  it. You can [check here](https://cran.r-project.org/bin/windows/base/rw-FAQ.html#How-do-I-UNinstall-R_003f) for
+  more information on how to remove old versions from your system if you wish to do so.
+
+##### If you don't have R and RStudio installed
+
+* Download R from
+  the [CRAN website](http://cran.r-project.org/bin/windows/base/release.htm).
+* Run the `.exe` file that was just downloaded
+* Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select **RStudio x.yy.zzz - Windows
+  Vista/7/8/10** (where x, y, and z represent version numbers)
+* Double click the file to install it
+* Once it's installed, open RStudio to make sure it works and you don't get any
+  error messages.
+
+
+#### macOS
+
+##### If you already have R and RStudio installed
+
+* Open RStudio, and click on "Help" > "Check for updates". If a new version is
+	available, quit RStudio, and download the latest version for RStudio.
+* To check the version of R you are using, start RStudio and the first thing
+  that appears on the terminal indicates the version of R you are running. Alternatively, you can type `sessionInfo()`, which will also display which version of R you are running. Go on
+  the [CRAN website](https://cran.r-project.org/bin/macosx/) and check
+  whether a more recent version is available. If so, please download and install
+  it.
+
+##### If you don't have R and RStudio installed
+
+* Download R from
+  the [CRAN website](http://cran.r-project.org/bin/macosx/).
+* Select the `.pkg` file for the latest R version
+* Double click on the downloaded file to install R
+* It is also a good idea to install [XQuartz](https://www.xquartz.org/) (needed
+  by some packages)
+* Go to the [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select **RStudio x.yy.zzz - Mac OS X 10.6+ (64-bit)**
+  (where x, y, and z represent version numbers)
+* Double click the file to install RStudio
+* Once it's installed, open RStudio to make sure it works and you don't get any
+  error messages.
+
+
+#### Linux
+
+* Follow the instructions for your distribution
+  from [CRAN](https://cloud.r-project.org/bin/linux), they provide information
+  to get the most recent version of R for common distributions. For most
+  distributions, you could use your package manager (e.g., for Debian/Ubuntu run
+  `sudo apt-get install r-base`, and for Fedora `sudo yum install R`), but we
+  don't recommend this approach as the versions provided by this are
+  usually out of date. In any case, make sure you have at least R 3.3.1.
+* Go to the
+  [RStudio download page](https://www.rstudio.com/products/rstudio/download/#download)
+* Under *Installers* select the version that matches your distribution, and
+  install it with your preferred method (e.g., with Debian/Ubuntu `sudo dpkg -i
+  rstudio-x.yy.zzz-amd64.deb` at the terminal).
+* Once it's installed, open RStudio to make sure it works and you don't get any
+  error messages.
+
+
+#### Installing `tidyverse`
+
+After installing R and RStudio, you need to install the `tidyverse` package.
+
+* After starting RStudio, at the console type:
+  `install.packages("tidyverse")`
+
+* You can also do this by going to Tools -> Install Packages and typing the names of the packages separated by a comma.
+
+<br/>
+
+### Contributors
+
+This course has been created by Alexia Cardona by adapting and adding new content to the [Data Carpentry lesson in Ecology](http://datacarpentry.org/R-ecology-lesson/):
+
+Michonneau F, Teal T, Fournier A, Seok B, Obeng A, Pawlik AN, Conrado AC, Woo K, Lijnzaad P, Hart T, White EP, Marwick B, Bolker B, Jordan KL, Ashander J, Dashnow H, Hertweck K, Cuesta SM, Becker EA, Guillou S, Shiklomanov A, Klinges D, Odom GJ, Jean M, Mislan KAS, Johnson K, Jahn N, Mannheimer S, Pederson S, Pletzer A, Fouilloux A, Switzer C, Bahlai C, Li D, Kerchner D, Rodriguez-Sanchez F, Rajeg GPW, Ye H, Tavares H, Leinweber K, Peck K, Lepore ML, Hancock S, Sandmann T, Hodges T, Tirok K, Jean M, Bailey A, von Hardenberg A, Theobold A, Wright A, Basu A, Johnson C, Voter C, Hulshof C, Bouquin D, Quinn D, Vanichkina D, Wilson E, Strauss E, Bledsoe E, Gan E, Fishman D, Boehm F, Daskalova G, Tavares H, Kaupp J, Dunic J, Keane J, Stachelek J, Herr JR, Millar J, Lotterhos K, Cranston K, Direk K, Tylén K, Chatzidimitriou K, Deer L, Tarkowski L, Chiapello M, Burle M, Ankenbrand M, Czapanskiy M, Moreno M, Culshaw-Maurer M, Koontz M, Weisner M, Johnston M, Carchedi N, Burge OR, Harrison P, Humburg P, Pauloo R, Peek R, Elahi R, Cortijo S, sfn_brt, Umashankar S, Goswami S, Sumedh, Yanco S, Webster T, Reiter T, Pearse W, Li Y (2019). “datacarpentry/R-ecology-lesson: Data Carpentry: Data Analysis and Visualization in R for Ecologists, June 2019.” doi: 10.5281/zenodo.3264888, http://datacarpentry.org/R-ecology-lesson/.
+
+
+

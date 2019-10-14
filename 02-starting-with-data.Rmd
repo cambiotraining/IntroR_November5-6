@@ -1,0 +1,517 @@
+---
+title: "Starting with data"
+author: "Alexia Cardona"
+---
+
+
+```{r, echo = FALSE, purl = FALSE, message = FALSE}
+source("setup.R")
+```
+
+<br/>
+
+## Understanding data
+
+```{r, echo=FALSE, purl=TRUE, warning=FALSE}
+### Presentation of the survey data
+```
+
+To be able to do proper data analyses, it is crucial to understand your data before you can analyse it. So before we start doing any form of analyses we will first understand the dataset that we will be using throughout this course.  Let us first download the file and have a look at the data.  
+
+We are going to use the R function `download.file()` to download the CSV file that contains the data.  
+```{r, eval=FALSE, purl=TRUE}
+download.file(url="https://ndownloader.figshare.com/files/2292169",
+              destfile = "data/portal_data_joined.csv")
+```
+Inside the download.file command, the first entry is a character string with the source URL 
+("https://ndownloader.figshare.com/files/2292169"). This source URL downloads a CSV file from 
+figshare. The text after the comma ("data/portal_data_joined.csv") is the destination of the 
+file on your local machine. 
+
+If you go in the Files section in RStudio, click on the `portal_data_joined.csv` file in the `data` folder and then click `View File` you will be able to see the content of the file.</span>
+
+```
+"record_id","month","day","year","plot_id","species_id","sex","hindfoot_length","weight","genus","species","taxa","plot_type"
+1,7,16,1977,2,"NL","M","32","","Neotoma","albigula","Rodent","Control"
+72,8,19,1977,2,"NL","M","31","","Neotoma","albigula","Rodent","Control"  224,9,13,1977,2,"NL","","","","Neotoma","albigula","Rodent","Control"
+```
+From the first 4 lines of the `portal_data_joined.csv` file displayed above, we can notice that the file is in the comma separated value (CSV) format which is a very popular format where different values are separated by a comma. The first line of the file is the header of the file which provides a title for each column.  In this dataset, we are studying the species repartition and weight of animals caught in plots in our study area. The dataset has the following columns, with each row holding information for a single animal:
+
+| Column           | Description                        |
+|------------------|------------------------------------|
+| record\_id       | Unique id for the observation      |
+| month            | month of observation               |
+| day              | day of observation                 |
+| year             | year of observation                |
+| plot\_id         | ID of a particular plot            |
+| species\_id      | 2-letter code                      |
+| sex              | sex of animal ("M", "F")           |
+| hindfoot\_length | length of the hindfoot in mm       |
+| weight           | weight of the animal in grams      |
+| genus            | genus of animal                    |
+| species          | species of animal                  |
+| taxon             | e.g. Rodent, Reptile, Bird, Rabbit |
+| plot\_type       | type of plot                       |
+
+
+## Reading in data from a file
+
+Now that we have looked at the raw format of the file (CSV format), let us load the data into R and look at how data is loaded into R.  We will use `read.csv()` to load into memory the content of the CSV file as an object of class `data.frame`. 
+
+You are now ready to load the data:
+
+```{r, eval=TRUE,  purl=FALSE}
+surveys <- read.csv("data/portal_data_joined.csv")
+```
+
+This statement doesn't produce any output because, as you might recall,
+assignments don't display anything. If we want to check that our data has been
+loaded, we can see the contents of the data frame by typing its name: `surveys`.
+
+Wow... that was a lot of output. At least it means the data loaded
+properly. Let's check the top (the first 6 lines) of this data frame using the
+function `head()`:
+
+```{r, results='show', purl=FALSE}
+head(surveys)
+```
+
+```{r, eval = FALSE, purl = FALSE}
+## Try also
+View(surveys)
+```
+
+> #### Note
+>
+> `read.csv` assumes that fields are delineated by commas, however, in several
+> countries, the comma is used as a decimal separator and the semicolon (;) is
+> used as a field delineator. If you want to read in this type of files in R,
+> you can use the `read.csv2` function. It behaves exactly like `read.csv` but
+> uses different parameters for the decimal and the field separators. If you are
+> working with another format, they can be both specified by the user. Check out
+> the help for `read.csv()` by typing `?read.csv` to learn more. There is also the `read.delim()` for 
+> in tab separated data files. It is important to note that all of these functions 
+> are actually wrapper functions for the main `read.table()` function with different arguments.
+> As such, the surveys data above could have also been loaded by using `read.table()`
+> with the separation argument as `,`. The code is as follows:
+> `surveys <- read.table(file="data/portal_data_joined.csv", sep=",", header=TRUE)`.
+> The header argument has to be set to TRUE to be able to read the headers as
+> by default `read.table()` has the header argument set to FALSE.
+>
+
+## Data frames
+
+Data frames are another data structure in R which is most widely used in the R programming world.  It is very popular as most of the data is readily available in tabular form and it is the also the data structure used when plotting and performing most analyses in R.  
+
+A data frame is the representation of data in the format of a table where the
+columns are vectors that all have the same length. Because columns are
+vectors, each column must contain a single type of data (e.g., characters, integers,
+logical). For example, here is a figure depicting a data frame comprising a
+numeric, a character, and a logical vector.
+
+![](./img/data-frame.svg)
+
+In R we can see this by inspecting the <b>str</b>ucture of a data frame
+with the function `str()`:
+
+```{r, results=TRUE, purl=FALSE, code_folding=show}
+str(surveys)
+```
+
+
+### Inspecting `data.frame` Objects
+
+As we mentioned before, it is important to understand your data before analysing it.  Furthermore we want to make sure that the data has loaded in R properly.  To do that, there are several functions we can use that help us to inspect our data.frame object.
+
+We already saw how the functions `head()`, `view()` and `str()` can be useful to check the
+content and the structure of a data frame. Here is a non-exhaustive list of
+functions to get a sense of the content/structure of the data. Let's try them out!
+
+* Size:
+    * `dim(surveys)` - returns a vector with the number of rows in the first element,
+          and the number of columns as the second element (the **dim**ensions of
+          the object)
+    * `nrow(surveys)` - returns the number of rows
+    * `ncol(surveys)` - returns the number of columns
+
+* Content:
+    * `head(surveys)` - shows the first 6 rows
+    * `tail(surveys)` - shows the last 6 rows
+
+* Names:
+    * `names(surveys)` - returns the column names (synonym of `colnames()` for `data.frame`
+	   objects)
+    * `rownames(surveys)` - returns the row names
+
+* Summary:
+    * `str(surveys)` - structure of the object and information about the class, length and  c
+	   content of  each column
+    * `summary(surveys)` - summary statistics for each column
+
+Note: most of these functions are "generic", they can be used on other types of
+objects besides `data.frame`.
+
+
+> #### Challenge
+>
+> Based on the output of `str(surveys)`, can you answer the following questions?
+>
+> * What is the class of the object `surveys`?
+> * How many rows and how many columns are in this object?
+> * How many taxa have been recorded during these surveys?
+>
+> ```{r, answer=TRUE}
+> str(surveys)
+>
+> ## * class: data frame
+> ## * how many rows: 34786,  how many columns: 13
+> ## * how many taxa: 4
+>
+> ```
+
+
+
+### Indexing and subsetting data frames  
+
+#### Numeric indexing
+You can think of a data frame as a table with rows and columns.  Each element in the data frame can be indexed by the position of the row and the column in respect to the whole data frame.  The index is specified as [R,C] where R is the position of the row (or row number) and C is the position of the column (or column number).  **Note that `[]` are used for indexing, while `()` are used to call a function**. Indexing in a data frame starts from 1.  To be able to extract specific data from the surveys data frame, we need to specify the indices or positions of the elements we want from it.   In the image below we zoom into the first three columns and rows of the surveys data frame and show their indexes displayed on top of their values in skyblue.  
+![](./images_raw/indexing_dataframe.svg)
+
+The illustration above illustrates how **numeric indexing** works. Below are some examples of how we can retrieve subset of values from the surveys data frame using numeric indexing. 
+
+```{r, purl=FALSE}
+# get first element in the first column of the data frame
+surveys[1, 1]   
+# get first element in the 6th column
+surveys[1, 6]   
+# get first column of the data frame (as a vector)
+surveys[, 1]    
+# get first three elements in the 7th column (as a vector)
+surveys[1:3, 7] 
+# get the 3rd row of the data frame (as a data.frame)
+surveys[3, ]    
+# equivalent to head_surveys <- head(surveys)
+head_surveys <- surveys[1:6, ] 
+```
+
+`:` is an operator in R that creates a sequence of numeric vectors of integers in increasing
+or decreasing order, test `1:10` and `10:1` for instance.  It is equivalent to the function `seq(from, to)`.
+
+You can also exclude certain indices of a data frame using the "`-`" sign:
+
+```{r, purl=FALSE}
+surveys[, -1]          # get the whole data frame, except the first column
+surveys[-c(7:34786), ] # equivalent to head(surveys)
+```
+
+<br/>
+
+#### Name indexing
+Data frames can be subset by calling indices (as shown previously), but also by calling their row names and column names directly.  This is known as **name indexing**. Below are some example of how we retrieve data from a data frame using column names. 
+
+```{r, eval = FALSE, purl=FALSE}
+# get species_id column as a vector
+surveys[, "species_id"]     
+# same as above
+surveys$species_id          
+# get the record_id and species columns for the first three rows
+# Note: we are mixing numeric and name indexing here
+surveys[1:3, c("record_id", "species")] 
+```
+In RStudio, you can use the autocompletion feature to get the full and correct names of the columns.
+
+<br/>
+
+#### Logical indexing
+Another way to retrieve data from a data frame is by **logical indexing**, or in other words, by performing a logical operation on a data frame.  
+
+```{r, eval=FALSE}
+# get all the records that have species as "albigula"
+surveys[surveys$species == "albigula",]
+# save all the records that have species as "albigula" into a variable
+albigula_data <- surveys[surveys$species == "albigula",]
+# how many records have species as "albigula" in the surveys data frame?
+nrow(albigula_data)
+```
+
+In case you are wondering what a *Neotoma albigula* is:
+[![Wikipedia](https://upload.wikimedia.org/wikipedia/commons/f/f9/White-throated_woodrat.jpg)](https://commons.wikimedia.org/wiki/File:White-throated_woodrat.jpg)
+
+<br/>
+
+> #### Challenge
+>
+> 1. Create a `data.frame` (`surveys_200`) containing only the data in
+>    row 200 of the `surveys` dataset.
+>
+> 2. Notice how `nrow()` gave you the number of rows in a `data.frame`?
+>
+>      * Use that number to pull out just that last row in the data frame.
+>      * Compare that with what you see as the last row using `tail()` to make
+>        sure it's meeting expectations.
+>      * Pull out that last row using `nrow()` instead of the row number.
+>      * Create a new data frame (`surveys_last`) from that last row.
+>
+> 3. Use `nrow()` to extract the row that is in the middle of the data
+>    frame. Store the content of this row in an object named `surveys_middle`.
+>
+> 4. Combine `nrow()` with the `-` notation above to reproduce the behavior of
+>    `head(surveys)`, keeping just the first through 6th rows of the surveys
+>    dataset.
+>
+> ```{r, answer=TRUE, purl=FALSE}
+> ## 1.
+> surveys_200 <- surveys[200, ]
+> ## 2.
+> # Saving `n_rows` to improve readability and reduce duplication
+> n_rows <- nrow(surveys)
+> surveys_last <- surveys[n_rows, ]
+> ## 3.
+> surveys_middle <- surveys[n_rows / 2, ]
+> ## 4.
+> surveys_head <- surveys[-(7:n_rows), ]
+> ```
+
+## Factors
+
+```{r, echo=FALSE, purl=TRUE}
+### Factors
+```
+
+When we did `str(surveys)` we saw that several of the columns consist of
+integers. The columns `genus`, `species`, `sex`, `plot_type`, ... however, are
+of a special class called `factor`. Factors are very useful and actually
+contribute to making R particularly well suited to working with data. So we are
+going to spend a little time introducing them.
+
+Factors represent categorical data. They are stored as integers associated with labels and they can be ordered or unordered. While factors look (and often behave) like character vectors, they are actually treated as integer vectors by R. So you need to be very careful when treating them as strings.
+
+Once created, factors can only contain a pre-defined set of values, known as
+*levels*. By default, R always sorts levels in alphabetical order. For
+instance, if you have a factor with 2 levels:
+
+```{r, purl=TRUE}
+sex <- factor(c("male", "female", "female", "male"))
+```
+
+R will assign `1` to the level `"female"` and `2` to the level `"male"` (because
+`f` comes before `m`, even though the first element in this vector is
+`"male"`). You can see this by using the function `levels()` and you can find the
+number of levels using `nlevels()`:
+
+```{r, purl=FALSE}
+levels(sex)
+nlevels(sex)
+```
+
+Sometimes, the order of the factors does not matter, other times you might want
+to specify the order because it is meaningful (e.g., "low", "medium", "high"),
+it improves your visualization, or it is required by a particular type of
+analysis. Here, one way to reorder our levels in the `sex` vector would be:
+
+```{r, results=TRUE, purl=FALSE}
+sex # current order
+sex <- factor(sex, levels = c("male", "female"))
+sex # after re-ordering
+```
+
+In R's memory, these factors are represented by integers (1, 2, 3), but are more
+informative than integers because factors are self describing: `"female"`,
+`"male"` is more descriptive than `1`, `2`. Which one is "male"?  You wouldn't
+be able to tell just from the integer data. Factors, on the other hand, have
+this information built in. It is particularly helpful when there are many levels
+(like the species names in our example dataset).
+
+### Converting factors
+
+If you need to convert a factor to a character vector, you use
+`as.character(x)`.
+
+```{r, purl=FALSE}
+as.character(sex)
+```
+
+In some cases, you may have to convert factors where the levels appear as
+numbers (such as concentration levels or years) to a numeric vector. For
+instance, in one part of your analysis the years might need to be encoded as
+factors (e.g., comparing average weights across years) but in another part of
+your analysis they may need to be stored as numeric values (e.g., doing math
+operations on the years). This conversion from factor to numeric is a little
+trickier. The `as.numeric()` function returns the index values of the factor,
+not its levels, so it will result in an entirely new (and unwanted in this case)
+set of numbers. One method to avoid this is to convert factors to characters,
+and then to numbers.
+
+Another method is to use the `levels()` function. Compare:
+
+```{r, purl=TRUE}
+year_fct <- factor(c(1990, 1983, 1977, 1998, 1990))
+as.numeric(year_fct)               # Wrong! And there is no warning...
+as.numeric(as.character(year_fct)) # Works...
+as.numeric(levels(year_fct))[year_fct]    # The recommended way.
+```
+
+Notice that in the `levels()` approach, three important steps occur:
+
+* We obtain all the factor levels using `levels(year_fct)`
+* We convert these levels to numeric values using `as.numeric(levels(year_fct))`
+* We then access these numeric values using the underlying integers of the
+  vector `year_fct` inside the square brackets
+
+### Renaming factors
+
+When your data is stored as a factor, you can use the `plot()` function to get a
+quick glance at the number of observations represented by each factor
+level. Let's look at the number of males and females captured over the course of
+the experiment:
+
+```{r, purl=TRUE}
+## bar plot of the number of females and males captured during the experiment:
+plot(surveys$sex)
+```
+
+In addition to males and females, there are about 1700 individuals for which the
+sex information hasn't been recorded. Additionally, for these individuals,
+there is no label to indicate that the information is missing or undetermined. Let's rename this
+label to something more meaningful. Before doing that, we're going to pull out
+the data on sex and work with that data, so we're not modifying the working copy
+of the data frame:
+
+```{r, results=TRUE, purl=FALSE}
+sex <- surveys$sex
+head(sex)
+levels(sex)
+levels(sex)[1] <- "undetermined"
+levels(sex)
+head(sex)
+```
+
+
+> ### Challenge
+>
+> * Rename "F" and "M" to "female" and "male" respectively.
+> * Now that we have renamed the factor level to "undetermined", can you recreate the
+>  barplot such that "undetermined" is last (after "male")?
+>
+> ```{r, answer=TRUE, purl=FALSE}
+> levels(sex)[2:3] <- c("female", "male")
+> sex <- factor(sex, levels = c("female", "male", "undetermined"))
+> plot(sex)
+> ``` 
+
+
+```{r wrong-order, results='show', echo=FALSE, purl=TRUE}
+## Challenges
+##
+## * Rename "F" and "M" to "female" and "male" respectively.
+## * Now that we have renamed the factor level to "undetermined", can you recreate the
+##   barplot such that "undetermined" is last (after "male")
+```
+
+
+### Using `stringsAsFactors=FALSE`
+
+By default, when building or importing a data frame, the columns that contain
+characters (i.e. text) are coerced (= converted) into factors. Depending on what you want to do with the data, you may want to keep these
+columns as `character`. To do so, `read.csv()` and `read.table()` have an
+argument called `stringsAsFactors` which can be set to `FALSE`.
+
+In most cases, it is preferable to set `stringsAsFactors = FALSE` when importing
+data and to convert as a factor only the columns that require this data
+type.
+
+
+```{r, eval=FALSE, purl=TRUE}
+## Compare the difference between our data read as `factor` vs `character`.
+surveys <- read.csv("data/portal_data_joined.csv", stringsAsFactors = TRUE)
+str(surveys)
+surveys <- read.csv("data/portal_data_joined.csv", stringsAsFactors = FALSE)
+str(surveys)
+## Convert the column "plot_type" into a factor
+surveys$plot_type <- factor(surveys$plot_type)
+```
+
+
+> ### Challenge
+>
+> 1. We have seen how data frames are created when using `read.csv()`, but
+>   they can also be created by hand with the `data.frame()` function.  There are
+>   a few mistakes in this hand-crafted `data.frame`. Can you spot and fix them?
+>   Don't hesitate to experiment!
+>
+>     ```{r, eval=FALSE, purl=FALSE}
+>     animal_data <- data.frame(
+>               animal = c(dog, cat, sea cucumber, sea urchin),
+>               feel = c("furry", "squishy", "spiny"),
+>               weight = c(45, 8 1.1, 0.8)
+>               )
+>     ```
+>
+>     ```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+>     ## Challenge:
+>     ##  There are a few mistakes in this hand-crafted `data.frame`,
+>     ##  can you spot and fix them? Don't hesitate to experiment!
+>     animal_data <- data.frame(
+>           animal = c(dog, cat, sea cucumber, sea urchin),
+>           feel = c("furry", "squishy", "spiny"),
+>           weight = c(45, 8 1.1, 0.8)
+>           )
+>     ```
+>
+> 2. Can you predict the class for each of the columns in the following example?
+>    Check your guesses using `str(country_climate)`:
+>      * Are they what you expected?  Why? Why not?
+>      * What would have been different if we had added `stringsAsFactors = FALSE` when creating the data frame?
+>      * What would you need to change to ensure that each column had the accurate data type?
+>
+>     ```{r, eval=FALSE, purl=FALSE}
+>     country_climate <- data.frame(
+>            country = c("Canada", "Panama", "South Africa", "Australia"),
+>            climate = c("cold", "hot", "temperate", "hot/temperate"),
+>            temperature = c(10, 30, 18, "15"),
+>            northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+>            has_kangaroo = c(FALSE, FALSE, FALSE, 1)
+>            )
+>     ```
+>
+>    ```{r, eval=FALSE, purl=TRUE, echo=FALSE}
+>    ## Challenge:
+>    ##   Can you predict the class for each of the columns in the following
+>    ##   example?
+>    ##   Check your guesses using `str(country_climate)`:
+>    ##   * Are they what you expected? Why? why not?
+>    ##   * What would have been different if we had added `stringsAsFactors = FALSE`
+>    ##     when we created this data frame?
+>    ##   * What would you need to change to ensure that each column had the
+>    ##     accurate data type?
+>    country_climate <- data.frame(country = c("Canada", "Panama", "South Africa", "Australia"),
+>                                   climate = c("cold", "hot", "temperate", "hot/temperate"),
+>                                   temperature = c(10, 30, 18, "15"),
+>                                   northern_hemisphere = c(TRUE, TRUE, FALSE, "FALSE"),
+>                                   has_kangaroo = c(FALSE, FALSE, FALSE, 1))
+>    ```
+>
+>    ```{text_answer, echo=FALSE, purl=FALSE}
+>    * missing quotations around the names of the animals
+>    * missing one entry in the `feel` column (probably for one of the furry animals)
+>    * missing one comma in the `weight` column
+>    * `country`, `climate`, `temperature`, and `northern_hemisphere` are
+>       factors; `has_kangaroo` is numeric
+>    * using `stringsAsFactors = FALSE` would have made character vectors instead of
+>      factors
+>    * removing the quotes in `temperature` and `northern_hemisphere` and replacing 1
+>      by TRUE in the `has_kangaroo` column would give what was probably 
+>      intended
+>    ```
+>
+
+The automatic conversion of data type is sometimes a blessing, sometimes an
+annoyance. Be aware that it exists, learn the rules, and double check that data
+you import in R are of the correct type within your data frame. If not, use it
+to your advantage to detect mistakes that might have been introduced during data
+entry (for instance, a letter in a column that should only contain numbers).
+
+Learn more in this [RStudio tutorial](https://support.rstudio.com/hc/en-us/articles/218611977-Importing-Data-with-RStudio)
+
+
+
