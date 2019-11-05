@@ -1,0 +1,12 @@
+output_dir: "."
+exclude: ["portal-database.sqlite", "DESCRIPTION", "Makefile"]
+output:
+  html_document:
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: false
+    toc_depth: 4
+    include:
+      in_header: header.html
+    css: style.css
