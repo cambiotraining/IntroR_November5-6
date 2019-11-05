@@ -158,9 +158,9 @@ others without worrying about whether or not the underlying scripts will still w
 
 > **Absolute vs Relative paths examples**
 > 
-> **Absolute path**: data/dataset1.txt
+> **Relative path**: data/dataset1.txt
 >
-> **Relative path**: C:/Users/User1/Documents/R/my-first-project/**data/dataset1.txt**
+> **Absolute path**: C:/Users/User1/Documents/R/my-first-project/**data/dataset1.txt**
 
 Using RStudio projects makes it easy to organise your files in the project and ensures that your working directory is set properly.  RStudio shows your current working directory at the top of your window:
 
